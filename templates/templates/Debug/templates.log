@@ -1,3 +1,7 @@
-﻿  SLinkedList.cpp
-  templates.vcxproj -> C:\Users\gameuser\Documents\Data Structures & Algorithms\templates\Debug\templates.exe
-  templates.vcxproj -> C:\Users\gameuser\Documents\Data Structures & Algorithms\templates\Debug\templates.pdb (Partial PDB)
+﻿  main.cpp
+c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\graph.h(76): warning C4018: '<': signed/unsigned mismatch
+  c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\graph.h(75): note: while compiling class template member function 'Graph<std::pair<std::string,int>,int>::~Graph(void)'
+  c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\main.cpp(25): note: see reference to function template instantiation 'Graph<std::pair<std::string,int>,int>::~Graph(void)' being compiled
+  c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\main.cpp(25): note: see reference to class template instantiation 'Graph<std::pair<std::string,int>,int>' being compiled
+  templates.vcxproj -> C:\Users\gameuser\Documents\Data Structures & Algorithms\Data-Structures-and-Algorithms-master\templates\Debug\templates.exe
+  templates.vcxproj -> C:\Users\gameuser\Documents\Data Structures & Algorithms\Data-Structures-and-Algorithms-master\templates\Debug\templates.pdb (Partial PDB)

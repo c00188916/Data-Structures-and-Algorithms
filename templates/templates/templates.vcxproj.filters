@@ -15,31 +15,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Adder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Container.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="List.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sequence.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SLinkedList.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SListIterator.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SListNode.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="SLinkedList.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphArc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

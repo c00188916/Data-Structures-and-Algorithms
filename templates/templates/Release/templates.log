@@ -1,0 +1,10 @@
+﻿  main.cpp
+c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\Graph.h(74): warning C4018: '<': signed/unsigned mismatch
+  c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\Graph.h(73): note: while compiling class template member function 'Graph<std::string,int>::~Graph(void)'
+  main.cpp(20): note: see reference to function template instantiation 'Graph<std::string,int>::~Graph(void)' being compiled
+  main.cpp(20): note: see reference to class template instantiation 'Graph<std::string,int>' being compiled
+  Generating code
+  All 436 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  templates.vcxproj -> C:\Users\gameuser\Documents\Data Structures & Algorithms\Data-Structures-and-Algorithms-master\templates\Release\templates.exe
+  templates.vcxproj -> C:\Users\gameuser\Documents\Data Structures & Algorithms\Data-Structures-and-Algorithms-master\templates\Release\templates.pdb (Full PDB)

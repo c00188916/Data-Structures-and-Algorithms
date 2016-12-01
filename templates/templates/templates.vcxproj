@@ -18,6 +18,14 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="GraphArc.h" />
+    <ClInclude Include="GraphNode.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{644F1B7F-0081-4302-BE12-507D4DF96ECD}</ProjectGuid>
     <RootNamespace>templates</RootNamespace>
@@ -109,18 +117,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="Adder.h" />
-    <ClInclude Include="Container.h" />
-    <ClInclude Include="List.h" />
-    <ClInclude Include="Sequence.h" />
-    <ClInclude Include="SLinkedList.h" />
-    <ClInclude Include="SListIterator.h" />
-    <ClInclude Include="SListNode.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="SLinkedList.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
