@@ -1,7 +1,10 @@
-﻿  main.cpp
-c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\graph.h(76): warning C4018: '<': signed/unsigned mismatch
-  c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\graph.h(75): note: while compiling class template member function 'Graph<std::pair<std::string,int>,int>::~Graph(void)'
-  c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\main.cpp(25): note: see reference to function template instantiation 'Graph<std::pair<std::string,int>,int>::~Graph(void)' being compiled
-  c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\main.cpp(25): note: see reference to class template instantiation 'Graph<std::pair<std::string,int>,int>' being compiled
+﻿  Source.cpp
+c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\graph.h(79): warning C4018: '<': signed/unsigned mismatch
+  c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\graph.h(78): note: while compiling class template member function 'Graph<std::pair<std::string,int>,int>::~Graph(void)'
+  c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\source.cpp(94): note: see reference to function template instantiation 'Graph<std::pair<std::string,int>,int>::~Graph(void)' being compiled
+  c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\source.cpp(94): note: see reference to class template instantiation 'Graph<std::pair<std::string,int>,int>' being compiled
+c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\graph.h(311): warning C4018: '<': signed/unsigned mismatch
+  c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\graph.h(305): note: while compiling class template member function 'void Graph<std::pair<std::string,int>,int>::ucs(GraphNode<std::pair<std::string,int>,int> *,GraphNode<std::pair<std::string,int>,int> *,void (__cdecl *)(GraphNode<std::pair<std::string,int>,int> *))'
+  c:\users\gameuser\documents\data structures & algorithms\data-structures-and-algorithms-master\templates\templates\source.cpp(122): note: see reference to function template instantiation 'void Graph<std::pair<std::string,int>,int>::ucs(GraphNode<std::pair<std::string,int>,int> *,GraphNode<std::pair<std::string,int>,int> *,void (__cdecl *)(GraphNode<std::pair<std::string,int>,int> *))' being compiled
   templates.vcxproj -> C:\Users\gameuser\Documents\Data Structures & Algorithms\Data-Structures-and-Algorithms-master\templates\Debug\templates.exe
   templates.vcxproj -> C:\Users\gameuser\Documents\Data Structures & Algorithms\Data-Structures-and-Algorithms-master\templates\Debug\templates.pdb (Partial PDB)

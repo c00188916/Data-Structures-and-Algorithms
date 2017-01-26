@@ -11,10 +11,11 @@ using namespace std;
 
 
 typedef GraphArc<std::string, int> Arc;
-typedef GraphNode<std::string, int> Node;
+typedef GraphNode<pair<std::string, int>, int> Node;
 
 void visit( Node * node ) {
-	cout << "Visiting: " << node->data() << endl;
+	cout << "Visiting: " << node->data().first << endl;
+	cout << "`Path cost: " << node->data().second << endl;
 }
 
 int main(int argc, char *argv[]) {
@@ -24,39 +25,37 @@ int main(int argc, char *argv[]) {
 
 	Graph< pair<string, int>, int > myGraph(6);
 
-    Graph<std::string, int> graph( 25 );
-	Graph<std::string, int> graphQ2(25);
+   // Graph<std::string, int> graph( 25 );
+	//Graph<std::string, int> graphQ2(25);
 	
 	std::string nodeLabel;
 	int i = 0;
 	ifstream myfile;
-	myfile.open ("nodes.txt");
+	myfile.open ("cityNames.txt");
 
-	while ( myfile >> nodeLabel ) {
-		graph.addNode(nodeLabel, i++);
+	std::pair<string, int> data;
+	while ( myfile >> data.first ) {
+		myGraph.addNode(data, i++);
 	}
 
 	myfile.close();
-	myfile.open("Q2Arcs.txt");
+	myfile.open("map.txt");
 
 	int from, to, weight;
-	while ( myfile >> from >> to >> weight ) {
-		graph.addArc(from, to, weight);
+	std::string fromS;
+	std::string toS;
+	while ( myfile >> fromS >> toS >> weight ) {
+		from = fromS.at(0) - 'A';
+		to = toS.at(0) - 'A';
+		myGraph.addArc(from, to, weight);
 	}
 	myfile.close();
-	myfile.open("mapArcs.txt");
-
-	string fromString, toString;
-	while (myfile >> fromString >> toString >> weight) {
-		//graph.addArc(fromString, toString, weight);
-	}
-
-	myfile.close();
+	
 
 	// Now traverse the graph with a breadth-first search.	
 	//graph.breadthFirst( graph.nodeIndex(0), visit );
-	graph.adaptedBreadthFirst(graph.nodeIndex(0), visit, graph.nodeIndex(20));
-	auto g = graph.nodeIndex(5);
+	//graph.adaptedBreadthFirst(graph.nodeIndex(0), visit, graph.nodeIndex(20));
+	//auto g = graph.nodeIndex(5);
 	system("PAUSE");
 	
 }

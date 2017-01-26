@@ -19,12 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphArc.h" />
-    <ClInclude Include="GraphNode.h" />
+    <ClInclude Include="graphnode.h" />
+    <ClInclude Include="NodeSearchCostComparer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{644F1B7F-0081-4302-BE12-507D4DF96ECD}</ProjectGuid>

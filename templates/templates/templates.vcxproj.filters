@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,7 +26,10 @@
     <ClInclude Include="GraphArc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GraphNode.h">
+    <ClInclude Include="graphnode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeSearchCostComparer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

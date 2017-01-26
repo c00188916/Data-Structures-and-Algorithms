@@ -16,7 +16,7 @@ private:
 // -------------------------------------------------------
 // Description: pointer to the node that the arc points to
 // -------------------------------------------------------
-    GraphNode<NodeType, ArcType>* m_node;
+    GraphNode<NodeType, ArcType>* m_pNode;
 
 // -------------------------------------------------------
 // Description: Weight of the arc
@@ -27,7 +27,7 @@ public:
     
     // Accessor functions
     GraphNode<NodeType, ArcType>* node() const {
-        return m_node;
+        return m_pNode;
     }
                               
     ArcType weight() const {
@@ -35,8 +35,8 @@ public:
     }
     
     // Manipulator functions
-    void setNode(GraphNode<NodeType, ArcType>* node) {
-       m_node = node;
+    void setNode(GraphNode<NodeType, ArcType>* pNode) {
+       m_pNode = pNode;
     }
     
     void setWeight(ArcType weight) {

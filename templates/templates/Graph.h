@@ -3,8 +3,14 @@
 
 #include <list>
 #include <queue>
-#include <vector>
 
+#include <list>
+#include <queue>
+#include <vector>
+#include <iostream>
+#include <functional>
+#include <limits>
+#include "NodeSearchCostComparer.h"
 using namespace std;
 
 template <class NodeType, class ArcType> class GraphArc;
@@ -24,9 +30,8 @@ private:
     typedef GraphNode<NodeType, ArcType> Node;
 
 // ----------------------------------------------------------------
-//  Description:    A container of all the nodes in the graph.
+//  Description:    An array of all the nodes in the graph.
 // ----------------------------------------------------------------
-
 	std::vector<Node *> m_nodes;
 
 
@@ -35,11 +40,10 @@ public:
     Graph( int size );
     ~Graph();
 
-	
     // Accessors
-    Node * nodeIndex(int index) const {
+	Node * nodeIndex(int index) const {
 		return m_nodes.at(index);
-    }
+	}
 
     // Public member functions.
     bool addNode( NodeType data, int index );
@@ -50,8 +54,8 @@ public:
     void clearMarks();
     void depthFirst( Node* pNode, void (*pProcess)(Node*) );
     void breadthFirst( Node* pNode, void (*pProcess)(Node*) );
-	void adaptedBreadthFirst(Node* pNode, void(*pProcess)(Node*), Node* endNode);
-	void ucs(Node* pStart, Node* pDest, void(*pVisitFunc)(Node*), std::vector<Node *>& path);
+	void ucs(Node* pStart, Node* pDest, void(*pVisitFunc)(Node*)); // , std::vector<Node *>& path);
+	void aStar(Node* pStart, Node* pDest, void(*pProcess)(Node*), std::vector<Node *>& path);
 };
 
 // ----------------------------------------------------------------
@@ -61,8 +65,8 @@ public:
 //  Return Value:   None.
 // ----------------------------------------------------------------
 template<class NodeType, class ArcType>
-Graph<NodeType, ArcType>::Graph( int maxNodes ) : m_nodes( maxNodes, nullptr) 
-{  
+Graph<NodeType, ArcType>::Graph(int maxNodes) : m_nodes(maxNodes, nullptr)
+{
 }
 
 // ----------------------------------------------------------------
@@ -73,40 +77,9 @@ Graph<NodeType, ArcType>::Graph( int maxNodes ) : m_nodes( maxNodes, nullptr)
 // ----------------------------------------------------------------
 template<class NodeType, class ArcType>
 Graph<NodeType, ArcType>::~Graph() {
-   for( int index = 0; index < m_nodes.size(); index++ ) {
-        if( m_nodes[index] != nullptr ) {
+	for (int index = 0; index < m_nodes.size(); index++) {
+		if (m_nodes[index] != nullptr) {
 			delete m_nodes.at(index);
-        }
-   }
-}
-// ----------------------------------------------------------------
-//  Name:           ucs
-//  Description:    This adds a node at a given index in the graph.
-//  Arguments:      The first parameter is the goal node indicating 
-//					destination	of the search.
-//                  The second parameter is the goal vertex.
-//					The third parameter is a function that outputs
-//					the node currently being expanded.
-//  Return Value:   true if successful
-// ----------------------------------------------------------------
-template<class NodeType, class ArcType>
-inline void Graph<NodeType, ArcType>::ucs(Node * pStart, Node * pDest, void(*pVisitFunc)(Node *), std::vector<Node*>& path)
-{
-	auto s = pStart;
-	auto g = pDest;
-
-	std::priority_queue<Node> pq<>;
-	pq.push(pStart);
-	pStart->setMarked(true);
-
-	while (!pq.empty() &&
-		    pq.top() != pDest)
-	{
-		std::list<Arc> & arcList = pq.top()->arcList();
-		for (auto & arc : arcList)
-		{
-			Node * c = arc.node();
-			pStart->
 		}
 	}
 }
@@ -119,18 +92,18 @@ inline void Graph<NodeType, ArcType>::ucs(Node * pStart, Node * pDest, void(*pVi
 //  Return Value:   true if successful
 // ----------------------------------------------------------------
 template<class NodeType, class ArcType>
-bool Graph<NodeType, ArcType>::addNode( NodeType data, int index ) {
-   bool nodeNotPresent = false;
-   // find out if a node does not exist at that index.
-   if ( nullptr == m_nodes.at(index) ) {
-      nodeNotPresent = true;
-      // create a new node, put the data in it, and unmark it.
-	  m_nodes.at(index) = new Node;
-	  m_nodes.at(index)->setData(data);
-	  m_nodes.at(index)->setMarked(false);
-    }
-        
-    return nodeNotPresent;
+bool Graph<NodeType, ArcType>::addNode(NodeType data, int index) {
+	bool nodeNotPresent = false;
+	// find out if a node does not exist at that index.
+	if (nullptr == m_nodes.at(index)) {
+		nodeNotPresent = true;
+		// create a new node, put the data in it, and unmark it.
+		m_nodes.at(index) = new Node;
+		m_nodes.at(index)->setData(data);
+		m_nodes.at(index)->setMarked(false);
+	}
+
+	return nodeNotPresent;
 }
 
 // ----------------------------------------------------------------
@@ -140,33 +113,33 @@ bool Graph<NodeType, ArcType>::addNode( NodeType data, int index ) {
 //  Return Value:   None.
 // ----------------------------------------------------------------
 template<class NodeType, class ArcType>
-void Graph<NodeType, ArcType>::removeNode( int index ) {
-     // Only proceed if node does exist.
-     if( nullptr != m_nodes.at(index) ) {
-         // now find every arc that points to the node that
-         // is being removed and remove it.        
-         Arc* arc;
+void Graph<NodeType, ArcType>::removeNode(int index) {
+	// Only proceed if node does exist.
+	if (nullptr != m_nodes.at(index)) {
+		// now find every arc that points to the node that
+		// is being removed and remove it.        
+		Arc* arc;
 
-         // loop through every node
-         for( int node = 0; node < m_nodes.size(); node++ ) {
-              // if the node is valid...
-              if( nullptr != m_nodes.at(node) ) {
-                  // see if the node has an arc pointing to the current node.
-                  arc = m_nodes.at(node)->getArc(m_nodes.at(index) );
-              }
-              // if it has an arc pointing to the current node, then
-              // remove the arc.
-              if( arc != 0 ) {
-                  removeArc( node, index );
-              }
-         }
-        
+		// loop through every node
+		for (int node = 0; node < m_nodes.size(); node++) {
+			// if the node is valid...
+			if (nullptr != m_nodes.at(node)) {
+				// see if the node has an arc pointing to the current node.
+				arc = m_nodes.at(node)->getArc(m_nodes.at(index));
+			}
+			// if it has an arc pointing to the current node, then
+			// remove the arc.
+			if (arc != 0) {
+				removeArc(node, index);
+			}
+		}
 
-        // now that every arc pointing to the current node has been removed,
-        // the node can be deleted.
-        delete m_nodes.at(index);
-		m_nodes.at(index) = nullptr;       
-    }
+
+		// now that every arc pointing to the current node has been removed,
+		// the node can be deleted.
+		delete m_nodes.at(index);
+		m_nodes.at(index) = nullptr;
+	}
 }
 
 // ----------------------------------------------------------------
@@ -179,24 +152,24 @@ void Graph<NodeType, ArcType>::removeNode( int index ) {
 //  Return Value:   true on success.
 // ----------------------------------------------------------------
 template<class NodeType, class ArcType>
-bool Graph<NodeType, ArcType>::addArc( int from, int to, ArcType weight ) {
-     bool proceed = true; 
-     // make sure both nodes exist.
-     if( nullptr == m_nodes.at(from) || nullptr == m_nodes.at(to) ) {
-         proceed = false;
-     }
-        
-     // if an arc already exists we should not proceed
-     if( m_nodes.at(from)->getArc( m_nodes.at(to) ) != nullptr ) {
-         proceed = false;
-     }
+bool Graph<NodeType, ArcType>::addArc(int from, int to, ArcType weight) {
+	bool proceed = true;
+	// make sure both nodes exist.
+	if (nullptr == m_nodes.at(from) || nullptr == m_nodes.at(to)) {
+		proceed = false;
+	}
 
-     if (proceed == true) {
-        // add the arc to the "from" node.
-		 m_nodes.at(from)->addArc(m_nodes.at(to), weight );
-     }
-        
-     return proceed;
+	// if an arc already exists we should not proceed
+	if (m_nodes.at(from)->getArc(m_nodes.at(to)) != nullptr) {
+		proceed = false;
+	}
+
+	if (proceed == true) {
+		// add the arc to the "from" node.
+		m_nodes.at(from)->addArc(m_nodes.at(to), weight);
+	}
+
+	return proceed;
 }
 
 // ----------------------------------------------------------------
@@ -207,20 +180,19 @@ bool Graph<NodeType, ArcType>::addArc( int from, int to, ArcType weight ) {
 //  Return Value:   None.
 // ----------------------------------------------------------------
 template<class NodeType, class ArcType>
-void Graph<NodeType, ArcType>::removeArc( int from, int to ) {
-     // Make sure that the node exists before trying to remove
-     // an arc from it.
-     bool nodeExists = true;
-     if( nullptr == m_nodes.at(from) || nullptr == m_nodes.at(to) ) {
-         nodeExists = false;
-     }
+void Graph<NodeType, ArcType>::removeArc(int from, int to) {
+	// Make sure that the node exists before trying to remove
+	// an arc from it.
+	bool nodeExists = true;
+	if (nullptr == m_nodes.at(from) || nullptr == m_nodes.at(to)) {
+		nodeExists = false;
+	}
 
-     if (nodeExists == true) {
-        // remove the arc.
-		 m_nodes.at(from)->removeArc(m_nodes.at(to) );
-     }
+	if (nodeExists == true) {
+		// remove the arc.
+		m_nodes.at(from)->removeArc(m_nodes.at(to));
+	}
 }
-
 
 // ----------------------------------------------------------------
 //  Name:           getArc
@@ -230,15 +202,17 @@ void Graph<NodeType, ArcType>::removeArc( int from, int to ) {
 //                  The second parameter is the ending node index.
 //  Return Value:   pointer to the arc, or 0 if it doesn't exist.
 // ----------------------------------------------------------------
+
+// Dev-CPP doesn't like Arc* as the (typedef'd) return type?
 template<class NodeType, class ArcType>
-GraphArc<NodeType, ArcType>* Graph<NodeType, ArcType>::getArc( int from, int to ) {
-     Arc* arc = 0;
-     // make sure the to and from nodes exist
-     if( nullptr != m_nodes.at(from) && nullptr != m_nodes.at(to) ) {
-         arc = m_nodes.at(from)->getArc(m_nodes.at(to) );
-     }
-                
-     return arc;
+GraphArc<NodeType, ArcType>* Graph<NodeType, ArcType>::getArc(int from, int to) {
+	Arc* arc = 0;
+	// make sure the to and from nodes exist
+	if (nullptr != m_nodes.at(from) && nullptr != m_nodes.at(to)) {
+		arc = m_nodes.at(from)->getArc(m_nodes.at(to));
+	}
+
+	return arc;
 }
 
 
@@ -250,11 +224,11 @@ GraphArc<NodeType, ArcType>* Graph<NodeType, ArcType>::getArc( int from, int to 
 // ----------------------------------------------------------------
 template<class NodeType, class ArcType>
 void Graph<NodeType, ArcType>::clearMarks() {
-     for( int index = 0; index < m_nodes.size(); index++ ) {
-          if( nullptr != m_nodes.at(index) ) {
-			  m_nodes.at(index)->setMarked(false);
-          }
-     }
+	for (int index = 0; index < m_nodes.size(); index++) {
+		if (nullptr != m_nodes.at(index)) {
+			m_nodes.at(index)->setMarked(false);
+		}
+	}
 }
 
 
@@ -267,20 +241,20 @@ void Graph<NodeType, ArcType>::clearMarks() {
 //  Return Value:   None.
 // ----------------------------------------------------------------
 template<class NodeType, class ArcType>
-void Graph<NodeType, ArcType>::depthFirst( Node* node, void (*process)(Node*) ) {
-     if( nullptr != node ) {
+void Graph<NodeType, ArcType>::depthFirst( Node* pNode, void (*pProcess)(Node*) ) {
+     if( pNode != 0 ) {
            // process the current node and mark it
-           pProcess( node );
-           node->setMarked(true);
+           pProcess( pNode );
+           pNode->setMarked(true);
 
            // go through each connecting node
-           auto iter = node->arcList().begin();
-           auto endIter = node->arcList().end();
+           list<Arc>::iterator iter = pNode->arcList().begin();
+           list<Arc>::iterator endIter = pNode->arcList().end();
         
 		   for( ; iter != endIter; ++iter) {
 			    // process the linked node if it isn't already marked.
                 if ( (*iter).node()->marked() == false ) {
-                   depthFirst( (*iter).node(), process);
+                   depthFirst( (*iter).node(), pProcess);
                 }            
            }
      }
@@ -296,72 +270,30 @@ void Graph<NodeType, ArcType>::depthFirst( Node* node, void (*process)(Node*) ) 
 //  Return Value:   None.
 // ----------------------------------------------------------------
 template<class NodeType, class ArcType>
-void Graph<NodeType, ArcType>::breadthFirst(Node* node, void(*process)(Node*)) {
-	if (nullptr != node) {
-		queue<Node*> nodeQueue;
-		// place the first node on the queue, and mark it.
-		nodeQueue.push(node);
-		node->setMarked(true);
-
-		// loop through the queue while there are nodes in it.
-		while (nodeQueue.size() != 0) {
-			// process the node at the front of the queue.
-			process(nodeQueue.front());
-
-			// add all of the child nodes that have not been 
-			// marked into the queue
-			auto iter = nodeQueue.front()->arcList().begin();
-			auto endIter = nodeQueue.front()->arcList().end();
-
-			for (; iter != endIter; iter++) {
-				if ((*iter).node()->marked() == false) {
-					// mark the node and add it to the queue.
-					(*iter).node()->setMarked(true);
-					nodeQueue.push((*iter).node());
-				}
-			}
-
-			// dequeue the current node.
-			nodeQueue.pop();
-		}
-	}
-};
-template<class NodeType, class ArcType>
-void Graph<NodeType, ArcType>::adaptedBreadthFirst( Node* node, void (*process)(Node*), Node* endNode) {
-   if( nullptr != node ) {
+void Graph<NodeType, ArcType>::breadthFirst( Node* pNode, void (*pProcess)(Node*) ) {
+   if( pNode != 0 ) {
 	  queue<Node*> nodeQueue;        
 	  // place the first node on the queue, and mark it.
-      nodeQueue.push( node );
-      node->setMarked(true);
+      nodeQueue.push( pNode );
+      pNode->setMarked(true);
 
       // loop through the queue while there are nodes in it.
       while( nodeQueue.size() != 0 ) {
          // process the node at the front of the queue.
-         process( nodeQueue.front() );
+         pProcess( nodeQueue.front() );
 
          // add all of the child nodes that have not been 
          // marked into the queue
-         auto iter = nodeQueue.front()->arcList().begin();
-         auto endIter = nodeQueue.front()->arcList().end();
+         list<Arc>::const_iterator iter = nodeQueue.front()->arcList().begin();
+         list<Arc>::const_iterator endIter = nodeQueue.front()->arcList().end();
          
 		 for( ; iter != endIter; iter++ ) {
               if ( (*iter).node()->marked() == false) {
 				 // mark the node and add it to the queue.
                  (*iter).node()->setMarked(true);
-				 (*iter).node()->setPrevious(nodeQueue.front());
                  nodeQueue.push( (*iter).node() );
-				 if ((*iter).node() == endNode) {
-					 Node* printNode = (*iter).node();
-					 while (printNode != node) {
-						 process(printNode);
-						 printNode = printNode->previous();
-					 }
-					 process(printNode);
-					 return;
-				 }
               }
          }
-		 
 
          // dequeue the current node.
          nodeQueue.pop();
@@ -369,9 +301,67 @@ void Graph<NodeType, ArcType>::adaptedBreadthFirst( Node* node, void (*process)(
    }  
 }
 
+template<class NodeType, class ArcType>
+void Graph<NodeType, ArcType>::ucs(Node* pStart, Node* pDest, void(*pVisitFunc)(Node*))
+{
+	int infin = std::numeric_limits<int>::max() - 10000;
+	std::priority_queue < Node *, std::vector<Node *>, NodeSearchCostComparer > pq;
 
 
 
+	for (int i = 0; i < m_nodes.size(); i++)
+	{
+		NodeType & data = m_nodes.at(i)->data();
+		data.second = infin;
+	}
+
+	NodeType & data = pStart->data();
+	data.second = 0;
+
+	pq.push(pStart);
+	pStart->setMarked(true);
+	while ((!(pq.empty())) && (pq.top() != pDest))
+	{
+		auto & arclist = pq.top()->arcList();
+		for (auto arc : arclist)
+		{
+			Node * c = arc.node();
+			if (c != pq.top()->previous())
+			{
+				int distC = arc.weight() + pq.top()->data().second;
+				if (distC < c->data().second)
+				{
+					c->data().second = distC;
+					c->setPrevious(pq.top());
+				}
+				if (c->marked() != true)
+				{
+					pq.push(c);
+					c->setMarked(true);
+				}
+			}
+		}
+		pq.pop();
+	}
+}
+
+// ------------------------------------------------------------------------
+//  Name:           aStar
+//  Description:    
+//  Arguments:      The first parameter is a Graph node indicating 
+//					the origin of the search.
+//                  The second parameter is the goal vertex //					indicating the destination of the search.
+//					The third parameter is a function that shows 
+//					the node currently being expanded.
+//					The fourth parameter  is a container which holds
+//					the best path generated by the algorithm’s completion.
+//  Return Value:   None.
+// ------------------------------------------------------------------------
+template<class NodeType, class ArcType>
+void Graph<NodeType, ArcType>::aStar(Node * pStart, Node * pDest, void(*pProcess)(Node *), std::vector<Node*>& path)
+{
+
+}
 
 #include "GraphNode.h"
 #include "GraphArc.h"
